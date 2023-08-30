@@ -1,5 +1,7 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -31,7 +33,9 @@ const formSchema = z.object({
 });
 
 export default function Home() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
+    // @ts-ignore
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -39,9 +43,22 @@ export default function Home() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-  }
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const response = await axios.post(
+        "https://frontend-take-home-service.fetch.com/auth/login",
+        values,
+        { withCredentials: true }
+      );
+
+      if (response.status === 200) {
+        router.push("/search");
+      }
+    } catch (error) {
+      // Handle errors
+      console.error("An error has occurred while logging in", error);
+    }
+  };
 
   return (
     <main className="container flex min-h-screen flex-col items-center justify-center p-4">
@@ -73,7 +90,7 @@ export default function Home() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="email" {...field} />
+                      <Input placeholder="email" type={"email"} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
