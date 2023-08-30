@@ -2,16 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import qs from "query-string";
 
 import { API_URL } from "@/lib/consts";
+import { Dog, SearchDogsParams } from "@/lib/types";
 
-export type SearchDogsParams = {
-  breed: string[];
-  zipCodes: string[];
-  ageMin: number;
-  ageMax: number;
-};
-
-export function useSearchDogs(params?: SearchDogsParams) {
-  return useQuery(["search", params], async () => {
+export function useSearchDogs(
+  params: SearchDogsParams = { sort: "breed:asc" }
+) {
+  return useQuery<Dog[]>(["search", params], async () => {
     const { resultIds } = await fetch(
       `${API_URL}/dogs/search?${qs.stringify(params ?? {})}`,
       {
