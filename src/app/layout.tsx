@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import Providers from "@/app/providers";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,8 +21,22 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Topbar />
+          {children}
+        </Providers>
       </body>
     </html>
+  );
+}
+
+function Topbar() {
+  return (
+    <div className="flex justify-between items-center p-4">
+      <div className="flex items-center text-3xl font-bold tracking-widest">
+        FDS
+      </div>
+      <ModeToggle />
+    </div>
   );
 }
