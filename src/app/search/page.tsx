@@ -1,25 +1,10 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
-
-function useBreeds() {
-  return useQuery(["breeds"], async () => {
-    const response = await fetch(
-      "https://frontend-take-home-service.fetch.com/dogs/breeds",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        credentials: "include",
-      }
-    );
-    return response.json();
-  });
-}
+import { useBreeds } from "@/app/search/useBreeds";
+import { useSearchDogs } from "@/app/search/useSearchDogs";
 
 export default function Search() {
-  const { data, isLoading, error } = useBreeds();
+  const { data: breeds } = useBreeds();
+  const { data, isLoading, error } = useSearchDogs();
 
   console.log(data);
   return (
