@@ -1,6 +1,5 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -45,10 +44,17 @@ export default function Home() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post(
+      const response = await fetch(
         "https://frontend-take-home-service.fetch.com/auth/login",
-        values,
-        { withCredentials: true }
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+          credentials: "include",
+          body: JSON.stringify(values),
+        }
       );
 
       if (response.status === 200) {
