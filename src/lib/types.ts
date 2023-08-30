@@ -4,7 +4,7 @@ export type SearchDogsParams = {
   ageMin?: number;
   ageMax?: number;
   size?: number;
-  sort: string;
+  sort?: string;
   from?: number;
 };
 

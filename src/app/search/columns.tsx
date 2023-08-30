@@ -1,21 +1,27 @@
 "use client";
-
 import { ColumnDef } from "@tanstack/react-table";
 
+import { DataTableColumnHeader } from "@/app/search/column-header";
 import { Dog } from "@/lib/types";
 
 export const columns: ColumnDef<Dog>[] = [
   {
     accessorKey: "name",
-    header: "Name",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Name" />
+    ),
   },
   {
     accessorKey: "age",
-    header: "Age",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Age" />
+    ),
   },
   {
     accessorKey: "breed",
-    header: "Breed",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Breed" />
+    ),
   },
   {
     accessorKey: "zip_code",

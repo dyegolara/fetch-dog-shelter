@@ -1,11 +1,17 @@
 "use client";
-
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useMemo } from "react";
 
 import {
   Table,
@@ -19,17 +25,41 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  isLoading?: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  isLoading,
 }: DataTableProps<TData, TValue>) {
+  const searchParams = useSearchParams();
+  const sortParams = useMemo(
+    () => searchParams.get("sort")?.split(":") || [],
+    [searchParams]
+  );
+
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
+    state: { sorting },
+    initialState: {
+      sorting: [{ id: "breed", desc: true }],
+      pagination: { pageIndex: 0, pageSize: 25 },
+    },
   });
+
+  useEffect(() => {
+    const [id, direction] = sortParams;
+    setSorting([{ id, desc: direction === "desc" }]);
+  }, [sortParams]);
 
   return (
     <div className="rounded-md border">
@@ -69,7 +99,7 @@ export function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                {isLoading ? "Loading..." : "No results."}
               </TableCell>
             </TableRow>
           )}

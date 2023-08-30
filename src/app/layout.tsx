@@ -2,6 +2,7 @@ import "./globals.css";
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Link from "next/link";
 
 import Providers from "@/app/providers";
 import { ModeToggle } from "@/components/ui/mode-toggle";
@@ -33,9 +34,11 @@ export default function RootLayout({
 function Topbar() {
   return (
     <div className="flex justify-between items-center p-4">
-      <div className="flex items-center text-3xl font-bold tracking-widest">
-        FDS
-      </div>
+      <Link href="/">
+        <div className="flex items-center text-3xl font-bold tracking-widest">
+          FDS
+        </div>
+      </Link>
       <ModeToggle />
     </div>
   );

@@ -8,7 +8,7 @@ export function useSearchDogs(
   params: SearchDogsParams = { sort: "breed:asc" }
 ) {
   return useQuery<Dog[]>(["search", params], async () => {
-    const { resultIds } = await fetch(
+    const response = await fetch(
       `${API_URL}/dogs/search?${qs.stringify(params ?? {})}`,
       {
         method: "GET",
@@ -18,17 +18,22 @@ export function useSearchDogs(
         },
         credentials: "include",
       }
-    ).then((res) => res.json());
+    ).then((res) => {
+      if (res.status === 200) return res.json();
+      throw res;
+    });
 
-    const response = await fetch(`${API_URL}/dogs`, {
+    return fetch(`${API_URL}/dogs`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
       },
       credentials: "include",
-      body: JSON.stringify(resultIds),
+      body: JSON.stringify(response?.resultIds),
+    }).then((res) => {
+      if (res.status === 200) return res.json();
+      throw res;
     });
-    return response.json();
   });
 }
