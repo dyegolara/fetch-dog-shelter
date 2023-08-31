@@ -58,7 +58,7 @@ export default function Home() {
       );
 
       if (response.status === 200) {
-        router.push("/search");
+        router.push("/search?sort=breed:asc");
       }
     } catch (error) {
       // Handle errors
