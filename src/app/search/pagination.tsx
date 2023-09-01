@@ -1,6 +1,5 @@
-import { usePathname, useSearchParams } from "next/navigation";
-import qs from "query-string";
-import React from "react";
+import { useSearchParams } from "next/navigation";
+import React, { useEffect, useMemo } from "react";
 
 import { Button } from "@/components/ui/button";
 import { useSetSearchParams } from "@/hooks/useSetSearchParams";
@@ -10,16 +9,22 @@ export function Pagination({
   canGoNext,
   canGoPrev,
   total,
+  isLoading,
 }: {
   canGoNext: boolean;
   canGoPrev: boolean;
   total: number;
+  isLoading?: boolean;
 }) {
+  const [totalPages, setTotalPages] = React.useState(0);
   const searchParams = useSearchParams()!;
   const setSearchParams = useSetSearchParams();
 
   const page = searchParams.get("page");
-  const totalPages = Math.ceil(total / PAGE_SIZE);
+
+  useEffect(() => {
+    if (!isLoading) setTotalPages(Math.ceil(total / PAGE_SIZE));
+  }, [total, isLoading]);
 
   return (
     <div className="flex justify-between items-center">

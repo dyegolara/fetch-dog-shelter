@@ -16,7 +16,7 @@ export default function Search({
 }) {
   const { data: breeds } = useBreeds();
   const { data: searchDogsResponse } = useSearchDogs(searchParams);
-  const { data } = useDogs(searchDogsResponse?.resultIds, {
+  const { data, isLoading } = useDogs(searchDogsResponse?.resultIds, {
     enabled: !!searchDogsResponse?.resultIds,
   });
 
@@ -31,12 +31,14 @@ export default function Search({
         canGoNext={!!searchDogsResponse?.next}
         canGoPrev={!!searchDogsResponse?.prev}
         total={searchDogsResponse?.total ?? 0}
+        isLoading={isLoading}
       />
-      <DataTable columns={columns} data={data ?? []} />
+      <DataTable columns={columns} data={data ?? []} isLoading={isLoading} />
       <Pagination
         canGoNext={!!searchDogsResponse?.next}
         canGoPrev={!!searchDogsResponse?.prev}
         total={searchDogsResponse?.total ?? 0}
+        isLoading={isLoading}
       />
     </main>
   );
