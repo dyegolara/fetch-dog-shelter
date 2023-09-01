@@ -20,7 +20,7 @@ export function Pagination({
   const searchParams = useSearchParams()!;
   const setSearchParams = useSetSearchParams();
 
-  const page = searchParams.get("page");
+  const page = searchParams.get("page") ?? 1;
 
   useEffect(() => {
     if (!isLoading) setTotalPages(Math.ceil(total / PAGE_SIZE));
@@ -31,7 +31,7 @@ export function Pagination({
       <div>
         <span className="font-bold">Page: </span>
         <span className="">
-          {page || 1} of {totalPages}
+          {page} of {totalPages}
         </span>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">

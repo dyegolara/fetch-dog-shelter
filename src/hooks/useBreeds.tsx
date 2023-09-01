@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { API_URL } from "@/lib/consts";
 
 export function useBreeds() {
-  return useQuery(["breeds"], () => {
+  return useQuery<string[]>(["breeds"], () => {
     return fetch(`${API_URL}/dogs/breeds`, {
       method: "GET",
       headers: {
