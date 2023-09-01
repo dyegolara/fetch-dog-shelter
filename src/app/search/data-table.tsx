@@ -13,6 +13,7 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo } from "react";
 
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -21,6 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { PAGE_SIZE } from "@/lib/consts";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -34,10 +36,6 @@ export function DataTable<TData, TValue>({
   isLoading,
 }: DataTableProps<TData, TValue>) {
   const searchParams = useSearchParams();
-  const sortParams = useMemo(
-    () => searchParams.get("sort")?.split(":") || [],
-    [searchParams]
-  );
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
@@ -45,21 +43,20 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onSortingChange: setSorting,
     state: { sorting },
     initialState: {
       sorting: [{ id: "breed", desc: true }],
-      pagination: { pageIndex: 0, pageSize: 25 },
+      pagination: { pageSize: PAGE_SIZE },
     },
   });
 
   useEffect(() => {
-    const [id, direction] = sortParams;
+    const [id, direction] = searchParams.get("sort")?.split(":") || [];
     setSorting([{ id, desc: direction === "desc" }]);
-  }, [sortParams]);
+  }, [searchParams]);
 
   return (
     <div className="rounded-md border">

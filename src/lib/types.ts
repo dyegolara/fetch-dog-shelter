@@ -3,9 +3,17 @@ export type SearchDogsParams = {
   zipCodes?: string[];
   ageMin?: number;
   ageMax?: number;
-  size?: number;
-  sort?: string;
-  from?: number;
+  size: number;
+  sort: string;
+  from: number;
+  page?: number;
+};
+
+export type SearchDogsResponse = {
+  total: number;
+  resultIds: string[];
+  next?: string;
+  prev?: string;
 };
 
 export type Dog = {
