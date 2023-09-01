@@ -1,6 +1,5 @@
 import { Column } from "@tanstack/react-table";
 import { ArrowDownIcon, ArrowUpDown, ArrowUpIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -10,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useSetSearchParams } from "@/hooks/useSetSearchParams";
 import { cn } from "@/lib/utils";
 
 interface DataTableColumnHeaderProps<TData, TValue>
@@ -23,7 +23,7 @@ export function DataTableColumnHeader<TData, TValue>({
   title,
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
-  const router = useRouter();
+  const setSearchParams = useSetSearchParams();
 
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
@@ -52,7 +52,7 @@ export function DataTableColumnHeader<TData, TValue>({
           <DropdownMenuItem
             onClick={() => {
               column.toggleSorting(false);
-              router.push(`/search?sort=${column.id}:asc`);
+              setSearchParams("sort", `${column.id}:asc`);
             }}
           >
             <ArrowUpIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
@@ -61,7 +61,7 @@ export function DataTableColumnHeader<TData, TValue>({
           <DropdownMenuItem
             onClick={() => {
               column.toggleSorting(true);
-              router.push(`/search?sort=${column.id}:desc`);
+              setSearchParams("sort", `${column.id}:desc`);
             }}
           >
             <ArrowDownIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
